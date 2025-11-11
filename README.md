@@ -53,7 +53,7 @@ Se você tem o GCC instalado, rodar nosso sistema é moleza.
 
 2.  **Compile (Dizendo para o GCC juntar as peças):**
     ```bash
-    gcc main.c fila.c -o atendimento_pacientes
+   gcc modules/fila.c main.c -o atendimento_pacientes
     ```
     *(Mudei o nome do executável para algo mais divertido!)*
 
