@@ -1,0 +1,66 @@
+<mxfile host="app.diagrams.net" modified="2025-11-11T02:30:58Z" agent="5.0 (Windows)" version="16.0.0" editor="diagramly">
+  <diagram id="fila-complexa" name="Fluxo Completo - Fila C">
+    <mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Main.c -->
+        <mxCell id="mainc" value="main.c&#10;&#10;• main()&#10;• menu_principal()&#10;• switch(opcao)&#10;• chamar funções de fila.c" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="40" width="250" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Fila.c -->
+        <mxCell id="filac" value="fila.c&#10;&#10;• criar_fila()&#10;• enfileirar()&#10;• desenfileirar()&#10;• imprimir_fila()&#10;• fila_vazia()&#10;• resetar_id()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="250" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Estrutura Fila -->
+        <mxCell id="estruturaFila" value="struct Fila&#10;&#10;• No *inicio;&#10;• No *fim;&#10;• int tamanho;&#10;&#10;Função associada: criar_fila()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="260" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Estrutura Nó -->
+        <mxCell id="estruturaNo" value="struct No&#10;&#10;• Paciente dado;&#10;• struct No *prox;&#10;&#10;static int prox_id;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="280" width="260" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Estrutura Paciente -->
+        <mxCell id="estruturaPaciente" value="struct Paciente&#10;&#10;• int id;&#10;• char nome[50];&#10;• int idade;&#10;• char sintomas[100];" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="500" width="260" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Função enfileirar -->
+        <mxCell id="funcEnfileirar" value="Função: enfileirar(Fila *f, Paciente p)&#10;&#10;1. Cria novo nó&#10;2. Atribui prox_id ao paciente&#10;3. Insere no fim da fila&#10;4. Atualiza ponteiros" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="290" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Função desenfileirar -->
+        <mxCell id="funcDesenfileirar" value="Função: desenfileirar(Fila *f)&#10;&#10;1. Remove o nó do início&#10;2. Atualiza ponteiro inicio&#10;3. Libera memória&#10;4. Retorna paciente removido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="340" width="290" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Relações -->
+        <mxCell id="arrow_main_fila" style="endArrow=block;html=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="mainc" target="filac">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow_fila_struct" style="endArrow=block;html=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="filac" target="estruturaFila">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow_fila_no" style="endArrow=block;html=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="filac" target="estruturaNo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow_no_paciente" style="endArrow=block;html=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="estruturaNo" target="estruturaPaciente">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow_fila_func1" style="endArrow=open;dashed=1;html=1;strokeColor=#666666;strokeWidth=1.5;" edge="1" parent="1" source="filac" target="funcEnfileirar">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow_fila_func2" style="endArrow=open;dashed=1;html=1;strokeColor=#666666;strokeWidth=1.5;" edge="1" parent="1" source="filac" target="funcDesenfileirar">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
