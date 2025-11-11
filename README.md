@@ -12,7 +12,7 @@ A gente sabe que ninguém faz milagre sozinho, né? Essa galera aqui botou a mã
 * **[Elane]** - Responsável pela implementação da `enfileirar()` e `desenfileirar()`.
 * **[Bianca]** - Foco na estrutura de controle da Fila (`fila.h` e `criar_fila()`).
 * **[Bruna]** - Desenho da aplicação, `main.c` e documentação (`README.md`).
-* **[Mathues Coelho]** - Implementação de utilidades (`liberar_fila()`, `limpar_buffer()`) e testes.
+* **[Matheus Coelho]** - Implementação de utilidades (`liberar_fila()`, `limpar_buffer()`) e correção de bugs.
 
 ### A Missão: Fila FIFO na Veia!
 
@@ -47,7 +47,7 @@ Se você tem o GCC instalado, rodar nosso sistema é moleza.
 
 1.  **Clone o projeto:**
     ```bash
-    git clone [Link do seu repositório GitHub]
+    git clone https://github.com/MatheusCoelho13/Atividade_pratica_fila_C
     cd Atividade_pratica_fila_C 
     ```
 
