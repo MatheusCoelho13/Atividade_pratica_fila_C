@@ -1,10 +1,10 @@
-#include "fila.h"
+#include "./modules/fila.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 int main()
 {
-
+   
     int opcao;
     Fila *fila_cliente = criar_fila();
 
@@ -24,24 +24,25 @@ int main()
         {
         case 1:
             // Código para adicionar paciente à fila
+            {
+                char nome;
+                paciente pac = adicionar_paciente(nome);
 
-            paciente pac;
+                printf("Adicionar paciente.\n");
+                printf("--------------------------------------------\n");
+                printf("Digite o nome do paciente: ");
+                scanf("%49[^\n]", pac.nome);
+                limpar_buffer();
 
-            printf("Adicionar paciente.\n");
-            printf("--------------------------------------------\n");
-            printf("Digite o nome do paciente: ");
-            scanf("%49[^\n]", pac.nome);
-            limpar_buffer();
+                enfileirar(fila_cliente, pac);
+                printf("Paciente adicionado à fila com sucesso!\n");
+                limpar_buffer();
 
-            enfileirar(fila_cliente, pac);
-            printf("Paciente adicionado à fila com sucesso!\n");
-            limpar_buffer();
+                printf("Aperte ENTER para retornar ao menu.\n");
+                getchar();
 
-            printf("Aperte ENTER para retornar ao menu.\n");
-            getchar();
-
-            break;
-
+                break;
+}
         case 2:
             // Código para atender próximo paciente
 
@@ -57,10 +58,14 @@ int main()
                 paciente atendido = desenfileirar(fila_cliente);
                 printf("Paciente atendido:\n");
                 print_paciente(atendido);
+                
                 printf("Paciente removido da fila com sucesso!\n\n");
                 printf("Proximo paciente na fila:\n");
-                paciente proximo = fila_cliente->inicio->dados;
-                print_paciente(proximo);
+                if (!lista_vazia(fila_cliente))
+                {
+                    paciente proximo = fila_cliente->inicio->dados;
+                    print_paciente(proximo);
+                }else
                 printf("\n");
             }
 

@@ -3,7 +3,9 @@
 #include <stdlib.h>
 
 static int prox_id = 1; // Variável estática para gerar IDs únicos para cada paciente.
-
+void resetar_id() {
+    prox_id = 1;
+}
 // FUNÇÃO PARA CRIAR UMA FILA
 Fila *criar_fila()
 {
@@ -19,13 +21,13 @@ Fila *criar_fila()
 
     return fila; // Retorna o ponteiro para a fila criada.
 }
-
 // FUNÇÃO PARA ADICIONAR UM PACIENTE À FILA
 paciente adicionar_paciente(const char *nome)
-{                      // Passa como parâmetro o nome do paciente.
+{
+    // Passa como parâmetro o nome do paciente.
     paciente paciente; // Cria uma variável do tipo paciente.
-    prox_id++;
-    paciente.id = prox_id;                                      // Atribui o ID gerado ao campo id da struct paciente.
+ 
+    paciente.id = prox_id++;                                      // Atribui o ID gerado ao campo id da struct paciente.
     snprintf(paciente.nome, sizeof(paciente.nome), "%s", nome); // Copia o nome passado como parâmetro para o campo nome da struct paciente.                                              //Incrementa o ID para o próximo paciente.
     return paciente;                                            // Retorna a struct paciente preenchida.
 }

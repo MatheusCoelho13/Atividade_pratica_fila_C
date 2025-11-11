@@ -22,6 +22,7 @@ typedef struct fila
 
 // protótipos das funções
 Fila *criar_fila();
+void resetar_id(); 
 paciente adicionar_paciente(const char *nome);
 int lista_vazia(Fila *fila);
 void liberar_fila(Fila *fila);
