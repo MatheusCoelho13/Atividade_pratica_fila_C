@@ -5,6 +5,7 @@ typedef struct
 {           // Define a struct para armazenar os dados do paciente.
     int id; // ID do paciente. -->IDENTIFICAÇÃO DO PACIENTE<--
     char nome[50];
+    int prioridade;
 } paciente;
 
 typedef struct elemento_fila
@@ -32,3 +33,4 @@ int tamanho_fila(Fila *fila);
 paciente desenfileirar(Fila *fila);
 void print_paciente(paciente paciente);
 void limpar_buffer();
+void atender_proximo_paciente(Fila* f1, Fila* f2, Fila* f3);
