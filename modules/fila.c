@@ -46,22 +46,27 @@ paciente adicionar_paciente(const char *nome) {
 
 // FUNÇÃO PARA VERIFICAR SE A FILA ESTÁ VAZIA --> RETORNA 1 SE ESTIVER VAZIA E 0 SE NÃO ESTIVER
 int lista_vazia(Fila *fila) {
-    // Retorna 1 (verdadeiro) se o tamanho da fila for 0, caso contrário retorna 0 (falso).
-    return fila->tamanho == 0; 
+    if (fila == NULL) return 1;
+    return (fila->inicio == NULL);
 }
+
 
 // FUNÇÃO PARA LIBERAR A FILA
 void liberar_fila(Fila *fila) {
-    Elemento *atual = fila->inicio; // Ponteiro para percorrer a lista.
-    
-    // Percorre cada elemento da fila, liberando a memória de cada um.
-    while (atual != NULL) {
-        Elemento *temp = atual; // Armazena o elemento atual.
-        atual = atual->prox;    // Avança para o próximo elemento.
-        free(temp);             // Libera a memória do elemento atual.
+    if (fila->inicio == NULL) {
+        free(fila); 
+        return;     
     }
-    
-    free(fila); // Libera a memória da estrutura da fila (cabeçalho).
+    Elemento *atual = fila->inicio; // Ponteiro para percorrer a lista.
+    Elemento *prox;
+
+    do {
+        prox = atual->prox;
+        free(atual);
+        atual = prox;
+    } while (atual != fila->inicio);
+
+free(fila);
 }
 
 // FUNÇÃO PARA ENFILEIRAR UM PACIENTE --> ADICIONAR O PACIENTE NO FINAL DA FILA (FIFO)
@@ -70,29 +75,24 @@ void enfileirar(Fila *fila, paciente dados) {
     Elemento *novo_elemento = (Elemento *)malloc(sizeof(Elemento)); 
     
     // Verifica a alocação de memória.
-    if (novo_elemento == NULL) {
-        printf("Erro ao alocar memoria para o novo elemento.\n"); 
-        exit(1); 
+        if (novo_elemento == NULL) {
+        printf("Erro ao alocar memoria para o novo elemento.\n");
+        exit(1);
     }
-    
+
     // Preenche os campos do novo elemento.
     novo_elemento->dados = dados; 
-    novo_elemento->prox = NULL; // É o último da fila, então o próximo é NULL.
 
-    // Caso 1: A fila NÃO está vazia.
-    if (fila->fim != NULL) {
-        // O elemento que era o último agora aponta para o novo elemento.
-        fila->fim->prox = novo_elemento; 
-    }
-    
-    // O novo elemento passa a ser o fim da fila.
-    fila->fim = novo_elemento; 
+if (fila->inicio == NULL) {
+    novo_elemento->prox = novo_elemento;
+    fila->inicio = novo_elemento;
+    fila->fim = novo_elemento;
+} else {
+    novo_elemento->prox = fila->inicio;   
+    fila->fim->prox = novo_elemento;
+    fila->fim = novo_elemento;
+}
 
-    // Caso 2: A fila ESTAVA vazia.
-    if (fila->inicio == NULL) {
-        // O novo elemento é o primeiro e o último.
-        fila->inicio = novo_elemento; 
-    }
 
     fila->tamanho++; // Incrementa o contador de tamanho da fila.
 }
@@ -101,20 +101,22 @@ void enfileirar(Fila *fila, paciente dados) {
 paciente desenfileirar(Fila *fila) {
     // Verifica se é possível remover (fila não vazia).
     if (lista_vazia(fila)) {
-        printf("Fila vazia. Nao e possivel desenfileirar.\n"); 
-        exit(1); 
-    }
+    printf("Fila vazia.\n");
+    exit(1);
+}
 
     Elemento *temp = fila->inicio;       // Ponteiro para o elemento a ser removido (início).
     paciente dados = temp->dados;        // Armazena os dados do paciente a ser retornado.
     
-    // O novo início é o próximo elemento.
-    fila->inicio = fila->inicio->prox; 
-
-    // Se o início se tornou NULL, significa que a fila ficou vazia.
-    if (fila->inicio == NULL) {
-        fila->fim = NULL; // O fim também deve ser NULL.
+    if (fila->inicio == fila->fim) {
+        // só 1 elemento
+        fila->inicio = NULL;         
+        fila->fim = NULL;           
+    } else {
+        fila->inicio = temp->prox;   
+        fila->fim->prox = fila->inicio; 
     }
+
 
     free(temp);      // Libera a memória do elemento removido.
     fila->tamanho--; // Diminui o tamanho da fila.
@@ -124,7 +126,9 @@ paciente desenfileirar(Fila *fila) {
 
 // FUNÇÃO PARA OBTER O TAMANHO DA FILA
 int tamanho_fila(Fila *fila) {
+    if (fila == NULL) return 0;
     return fila->tamanho; // Retorna o tamanho armazenado na estrutura.
+
 }
 
 // FUNÇÃO PARA IMPRIMIR OS DADOS DE UM PACIENTE
@@ -134,13 +138,21 @@ void print_paciente(paciente paciente) {
 
 // FUNÇÃO PARA IMPRIMIR A FILA COMPLETA
 void imprimir_fila(Fila *fila) {
-    Elemento *atual = fila->inicio; // Ponteiro para percorrer a lista.
-    printf("--- Conteudo da Fila (Tamanho: %d) ---\n", fila->tamanho);
-    
-    while (atual != NULL) {
-        print_paciente(atual->dados); // Imprime os dados do paciente.
-        atual = atual->prox;          // Avança para o próximo elemento.
+
+    if (lista_vazia(fila)) {            // MODIFICADO
+        printf("Fila vazia.\n");
+        return;
     }
+
+    Elemento *atual = fila->inicio;
+
+    printf("--- Conteudo da Fila (Tamanho: %d) ---\n", fila->tamanho);
+
+    do {
+        print_paciente(atual->dados);
+        atual = atual->prox;
+    } while (atual != fila->inicio);    // MODIFICADO
+
     printf("-----------------------------------------\n");
 }
 

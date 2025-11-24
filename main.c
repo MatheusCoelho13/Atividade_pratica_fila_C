@@ -18,8 +18,9 @@ int main()
 
     do
     {
-        printf("\n Sistema de Gerenciamento de Fila de Pacientes\n");
-        printf("--------------------------------------------\n");
+        printf("\n=====================================================\n"); 
+        printf("      Sistema de Gerenciamento de Pacientes\n");       
+        printf("=====================================================\n"); 
         printf("Selecione uma opção:\n");
         printf("1. Adicionar paciente à fila\n");
         printf("2. Atender próximo paciente\n");
@@ -29,7 +30,8 @@ int main()
      
         if (scanf("%d", &opcao) != 1) {
             limpar_buffer();
-            opcao = -1; 
+            opcao = -1;
+            printf("Entrada inválida! Digite apenas números.\n"); 
         } else {
             limpar_buffer();
         }
@@ -42,8 +44,8 @@ int main()
                 paciente pac;
                 pac.prioridade = 0; 
 
-                printf("\nAdicionar paciente.\n");
-                printf("--------------------------------------------\n");
+                printf("\nAdicionar Paciente\n");                    
+                printf("-----------------------------------------------------\n");
                 printf("Digite o nome do paciente: ");
                 
                 if (scanf("%49[^\n]", nome_adic) != 1) {
@@ -55,8 +57,11 @@ int main()
 
                 pac = adicionar_paciente(nome_adic);
                 
-                printf("Defina nível de prioridade (1 a 3):\n");
-                printf("1 - Verde (Baixa);\n2 - Amarelo (Média);\n3 - Vermelho (Alta);\nPrioridade: ");
+                printf("\nSelecione a prioridade:\n");  
+                printf("1 - Verde (Baixa)\n");
+                printf("2 - Amarelo (Média)\n");
+                printf("3 - Vermelho (Alta)\n");
+                printf("Prioridade: ");
                 
                 if (scanf("%d", &pac.prioridade) != 1) { 
                     printf("Prioridade inválida. Paciente não adicionado.\n");
@@ -141,7 +146,7 @@ int main()
             return 0; 
         
         default:
-            printf("Opção inválida. Tente novamente.\n");
+            printf("Opção inválida! Tente novamente.\n");
             limpar_buffer();
             break;
         }
