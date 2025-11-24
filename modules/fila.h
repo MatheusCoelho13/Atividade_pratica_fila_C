@@ -21,16 +21,25 @@ typedef struct fila
     int tamanho;
 } Fila;
 
+// Constantes de segurança
+#define MAX_PACIENTES_POR_FILA 3
+#define FILA_CHEIA -1
+#define FILA_VAZIA -2
+
 // protótipos das funções
 Fila *criar_fila();
 void resetar_id(); 
 paciente adicionar_paciente(const char *nome);
 int lista_vazia(Fila *fila);
-void liberar_fila(Fila *fila);
-void enfileirar(Fila *fila, paciente dados);
+int lista_cheia(Fila *fila);
+int liberar_fila(Fila *fila);
+int enfileirar(Fila *fila, paciente dados);
 void imprimir_fila(Fila *fila);
 int tamanho_fila(Fila *fila);
-paciente desenfileirar(Fila *fila);
+int desenfileirar(Fila *fila, paciente *dados);
 void print_paciente(paciente paciente);
 void limpar_buffer();
 void atender_proximo_paciente(Fila* f1, Fila* f2, Fila* f3);
+int liberar_todas_filas(Fila *f1, Fila *f2, Fila *f3);
+int Gerar_relatorio(Fila *f1, Fila *f2, Fila *f3, paciente paciente );
+int pegar_id(paciente paciente);
