@@ -25,7 +25,8 @@ int main()
         printf("1. Adicionar paciente à fila\n");
         printf("2. Atender próximo paciente\n");
         printf("3. Exibir filas de pacientes\n");
-        printf("4. Sair\n");
+        printf("4. Gerar relatorio \n");
+        printf("5. Sair\n");
         printf("Opção: ");
      
         if (scanf("%d", &opcao) != 1) {
@@ -71,14 +72,32 @@ int main()
                 limpar_buffer();
 
                 if (pac.prioridade == 3) {
-                    enfileirar(fila_priori3, pac);
-                    printf("Paciente %s adicionado a fila VERMELHA (Alta).\n", pac.nome);
+                    if (enfileirar(fila_priori3, pac) == 0)
+                    {
+                        printf("Paciente %s adicionado a fila VERMELHA (Alta).\n", pac.nome);
+                    }
+                    else
+                    {
+                        printf("ERRO: Nao foi possivel adicionar paciente a fila VERMELHA.\n");
+                    }
                 } else if (pac.prioridade == 2) {
-                    enfileirar(fila_priori2, pac);
-                    printf("Paciente %s adicionado a fila AMARELA (Média).\n", pac.nome);
+                    if (enfileirar(fila_priori2, pac) == 0)
+                    {
+                        printf("Paciente %s adicionado a fila AMARELA (Média).\n", pac.nome);
+                    }
+                    else
+                    {
+                        printf("ERRO: Nao foi possivel adicionar paciente a fila AMARELA.\n");
+                    }
                 } else if (pac.prioridade == 1) {
-                    enfileirar(fila_priori1, pac);
-                    printf("Paciente %s adicionado a fila VERDE (Baixa).\n", pac.nome);
+                    if (enfileirar(fila_priori1, pac) == 0)
+                    {
+                        printf("Paciente %s adicionado a fila VERDE (Baixa).\n", pac.nome);
+                    }
+                    else
+                    {
+                        printf("ERRO: Nao foi possivel adicionar paciente a fila VERDE.\n");
+                    }
                 } else {
                     printf("Prioridade inválida (Use 1, 2 ou 3). Paciente não adicionado.\n");
                 }
@@ -138,20 +157,26 @@ int main()
             break;
 
         case 4:
-         
-            liberar_fila(fila_priori1);
-            liberar_fila(fila_priori2);
-            liberar_fila(fila_priori3);
+        {
+            paciente pac = {0};
+            Gerar_relatorio(fila_priori1, fila_priori2, fila_priori3, pac);
+        }
+        break;
+        case 5:
+        {
+            printf("\nLimpando memoria e encerrando o sistema...\n");
+            printf("--------------------------------------------\n");
+            liberar_todas_filas(fila_priori1, fila_priori2, fila_priori3);
             printf("\nSaindo do sistema. Até logo!\n");
-            return 0; 
-        
+            return 0;
+        }
         default:
             printf("Opção inválida! Tente novamente.\n");
             limpar_buffer();
             break;
         }
 
-    } while (opcao != 4);
+    } while (opcao != 5);
 
     return 0;
 }
