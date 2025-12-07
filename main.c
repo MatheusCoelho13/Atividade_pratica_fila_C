@@ -43,6 +43,7 @@ int main()
         printf("5. Listar Setores Alcançáveis (BFS)\n");
         printf("6. Gerar relatorio \n");
         printf("7. Sair\n");
+        printf("8. Detectar setores criticos (Tarjan)\n");
         printf("Opcao: ");
 
         if (scanf("%d", &opcao) != 1) {
@@ -229,11 +230,23 @@ int main()
             printf("\nSaindo do sistema. Até logo!\n");
             return 0;
         }
+
+        case 8: 
+
+        {
+            printf("\nExecutando Tarjan para identificar setores criticos...\n"); 
+            encontrar_pontos_articulacao(grafo_hospital);
+            printf("\nRelatorio gerado. Aperte ENTER para voltar ao menu.\n");
+            getchar(); 
+        }
+        break;
+
         default:
             printf("Opção inválida! Tente novamente.\n");
             limpar_buffer();
             break;
         }
+        
 
     } while (opcao != 6);
 
