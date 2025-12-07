@@ -1,49 +1,151 @@
 #include "./modules/fila.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h> 
+        case 5:
+        {
+            printf("\nListar Setores Alcançáveis usando BFS\n");
+            printf("--------------------------------------------\n");
+            GrafoHospital *grafo = criar_grafo_hospital();
+            if (!grafo) break;
 
-int main()
-{
-    int opcao;
-  
-    Fila *fila_priori1 = criar_fila(); // Baixa - Verde
-    Fila *fila_priori2 = criar_fila(); // Média - Amarelo
-    Fila *fila_priori3 = criar_fila(); // Alta - Vermelho
+            inserir_arestas_hospital(grafo);
+            imprimir_grafo_hospital(grafo); 
 
-    // Criar grafo do hospital
-    GrafoHospital *grafo_hospital = criar_grafo_hospital();
-    if (!grafo_hospital)
-    {
-        printf("Erro fatal: Falha ao criar grafo do hospital. Encerrando.\n");
-        return 1;
-    }
+            int setor_inicial = exibir_tabela_setores(); 
+            
+            if (setor_inicial != -1) {
+                bfs(grafo, setor_inicial);
+            }
+            liberar_grafo_hospital(grafo); 
+        }
+        break;
 
-    // Inserir vértices e arestas do hospital
-    inserir_vertices_hospital(grafo_hospital);
-    int total_arestas = inserir_arestas_hospital(grafo_hospital);
-    printf("Total de conexões inseridas: %d\n\n", total_arestas);
+        case 6:
+        {
+            paciente pac = {0};
+            Gerar_relatorio(fila_priori1, fila_priori2, fila_priori3, pac);
+            printf("\nRelatorio global da fila ordenada unica:\n");
+            printf("  Total enfileirados: %d\n", obter_total_enfileirados());
+            printf("  Total atendidos: %d\n", obter_total_atendidos());
+            printf("  Tempo medio de espera (s): %.2f\n", obter_media_tempo_espera());
+            printf("  Pico de tamanho da fila: %d\n", obter_max_tamanho_fila());
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
 
-    if (!fila_priori1 || !fila_priori2 || !fila_priori3) {
-        printf("Erro fatal: Falha ao inicializar as filas. Encerrando.\n");
-        liberar_grafo_hospital(grafo_hospital);
-        return 1;
-    }
-
-    do
-    {
-        printf("\n=====================================================\n");
-        printf("   Sistema de Gerenciamento de Pacientes\n");
-        printf("=====================================================\n");
-        printf("Selecione uma opcao:\n");
-        printf("1. Adicionar paciente a fila\n");
-        printf("2. Atender proximo paciente\n");
-        printf("3. Exibir filas de pacientes\n");
-        printf("4. Visualizar Grafo do Hospital\n");
-        printf("5. Listar Setores Alcançáveis (BFS)\n");
-        printf("6. Gerar relatorio \n");
+        case 8:
+        {
+            char nome_adic[50];
+            paciente pac;
+            printf("\nAdicionar Paciente (fila ordenada)\n");
+            printf("-----------------------------------------------------\n");
+            printf("Digite o nome do paciente: ");
+            if (scanf("%49[^
         printf("7. Sair\n");
+                limpar_buffer();
+                printf("Leitura do nome falhou.\n");
+                break;
+            }
+            limpar_buffer();
+            pac = adicionar_paciente(nome_adic);
+            printf("\nSelecione a prioridade:\n");
+            printf("1 - Verde (Baixa)\n");
+            printf("2 - Amarelo (Media)\n");
+            printf("3 - Vermelho (Alta)\n");
+            printf("Prioridade: ");
+            if (scanf("%d", &pac.prioridade) != 1) {
+                printf("Prioridade inválida. Paciente não adicionado.\n");
+                limpar_buffer();
+                break;
+            }
+            limpar_buffer();
+            if (enfileirar_ordenado(fila_prioritaria, pac) == 0) {
+                printf("Paciente %s adicionado na fila ordenada com prioridade %d.\n", pac.nome, pac.prioridade);
+            } else {
+                printf("ERRO: Não foi possivel adicionar paciente na fila ordenada.\n");
+            }
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
+
+        case 9:
+        {
+            printf("\nFila ordenada por prioridade:\n");
+            imprimir_fila(fila_prioritaria);
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
+
+        case 10:
+        {
+            paciente pac;
+            int r = desenfileirar(fila_prioritaria, &pac);
+            if (r == 0) {
+                printf("Paciente atendido (fila ordenada):\n");
+                print_paciente(pac);
+            } else {
+                printf("Fila ordenada vazia. Nada a atender.\n");
+            }
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
+
+        case 11:
+        {
+            char nome_busca[50];
+            printf("\nBuscar paciente na fila ordenada\n");
+            printf("Nome: ");
+            if (scanf("%49[^
         printf("Opcao: ");
+                limpar_buffer();
+                printf("Leitura falhou.\n");
+                break;
+            }
+            limpar_buffer();
+            int pos = buscar_paciente(fila_prioritaria, nome_busca);
+            if (pos >= 0) printf("Paciente '%s' encontrado na posicao %d da fila ordenada.\n", nome_busca, pos);
+            else printf("Paciente '%s' nao encontrado na fila ordenada.\n", nome_busca);
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
+
+        case 12:
+        {
+            const char *nome_arq = "fila_ordenada_export.txt";
+            if (exportar_fila(fila_prioritaria, nome_arq) == 0) {
+                printf("Fila ordenada exportada para '%s'\n", nome_arq);
+            } else {
+                printf("Falha ao exportar fila ordenada.\n");
+            }
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar();
+        }
+        break;
+
+        case 7:
+        {
+            printf("\nLimpando memoria e encerrando o sistema...\n");
+            printf("--------------------------------------------\n");
+            liberar_grafo_hospital(grafo_hospital);
+            liberar_todas_filas(fila_priori1, fila_priori2, fila_priori3);
+            liberar_fila(fila_prioritaria);
+            printf("\nSaindo do sistema. Até logo!\n");
+            return 0;
+        }
+        default:
+            printf("Opção inválida! Tente novamente.\n");
+            limpar_buffer();
+            break;
+        }
+
+    } /* fim do while(1) */
+
+    return 0;
+}
 
         if (scanf("%d", &opcao) != 1) {
             limpar_buffer();
@@ -200,7 +302,7 @@ int main()
             if (!grafo) return 1;
 
             inserir_arestas_hospital(grafo);
-            imprimir_grafo_hospital(grafo); 
+            imprimir_grafo_hospital(grafo);
 
             int setor_inicial = exibir_tabela_setores(); 
             
@@ -213,10 +315,25 @@ int main()
         }
         break;
 
-        case 6:
+      /*  case 6:
         {
             paciente pac = {0};
             Gerar_relatorio(fila_priori1, fila_priori2, fila_priori3, pac);
+        }
+        break; */
+
+        case 6:
+        {
+            // Item 3: Chamamos a função completa que está em fila.c.
+            // Usamos NULL para o último parâmetro (fila_unica) porque não o estamos usando.
+            printf("\nGerando Relatório Estatístico...\n");
+            printf("--------------------------------------------\n");
+            Gerar_relatorio_estendido(fila_priori1, fila_priori2, fila_priori3, NULL); 
+            printf("--------------------------------------------\n");
+            
+            // Item 7 (UX): Adiciona pausa para o usuário conseguir ler o relatório.
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar(); 
         }
         break;
 
