@@ -758,7 +758,7 @@ void dfs_visitar(GrafoHospital *grafo, int u, int visitado[], int *tempo)
         else if (visitado[v] == 1) // Se o vizinho é Cinza (Em processo)
         {
             // ALERTA: Retornamos ao nó 'u' a partir do vizinho 'v' que ainda não foi finalizado. Isso é um Ciclo!
-            printf("   ⚠️ ALERTA DE DEPENDÊNCIA CIRCULAR (Ciclo): %s -> %s\n", 
+            printf("   ALERTA DE DEPENDÊNCIA CIRCULAR (Ciclo): %s -> %s\n", 
                     grafo->vertices[u].nome, grafo->vertices[v].nome);
         }
         // Se visitado[v] == 2 (Preto), ignoramos (já está finalizado)
