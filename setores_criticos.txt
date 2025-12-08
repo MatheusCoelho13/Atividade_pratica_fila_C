@@ -1,7 +1,0 @@
-RELATORIO DE SETORES CRITICOS
-==============================
-
-  - [0] Recepcao
-  - [2] Enfermaria
-
-Total de setores criticos: 2
