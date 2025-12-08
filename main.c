@@ -44,7 +44,6 @@ int main()
         printf("6. Gerar relatorio \n");
         printf("7. Sair\n");
         printf("8. Detectar setores criticos (Tarjan)\n");
-        printf("9. Analisar Dependencias (DFS)\n");
         printf("Opcao: ");
 
         if (scanf("%d", &opcao) != 1) {
@@ -258,15 +257,6 @@ int main()
             encontrar_pontos_articulacao(grafo_hospital);
             printf("\nRelatorio gerado. Aperte ENTER para voltar ao menu.\n");
             getchar(); 
-        }
-        break;
-
-        case 9:
-        {
-            printf("\nExecutando DFS para analise de dependencias...\n");
-            dfs(grafo_hospital);
-            printf("\nAperte ENTER para voltar ao menu.\n");
-            getchar();
         }
         break;
 

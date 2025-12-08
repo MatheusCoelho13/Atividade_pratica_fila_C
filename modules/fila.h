@@ -106,10 +106,6 @@ int exibir_tabela_setores();
 void enfileirar_id(int id_setor)
 void bfs(GrafoHospital *grafo, int id_setor_inicial);
 
-// Protótipos - DFS (Busca em Profundidade)
-void dfs(GrafoHospital *grafo);
-void dfs_visitar(GrafoHospital *grafo, int u, int visitado[], int *tempo);
-
 // Protótipos - Tarjan (pontos de articulação)
 void encontrar_pontos_articulacao(GrafoHospital *grafo); 
 void tarjan_util(GrafoHospital *grafo, int u, int *tempo, int *disc, int *low, int *parent, int *ap);
