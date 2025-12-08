@@ -87,6 +87,11 @@ int Gerar_relatorio(Fila *f1, Fila *f2, Fila *f3, paciente paciente );
 int pegar_id(paciente paciente);
 
 // Protótipos - Grafo do Hospital
+
+/* ============================================================
+   ALGORITMOS DE GRAFO (BUSCA EM PROFUNDIDADE - DFS)
+============================================================ */
+
 GrafoHospital *criar_grafo_hospital();
 int inserir_vertices_hospital(GrafoHospital *grafo);
 int inserir_arestas_hospital(GrafoHospital *grafo);
@@ -96,6 +101,9 @@ void imprimir_setores_conectados(GrafoHospital *grafo, int setor);
 int liberar_grafo_hospital(GrafoHospital *grafo);
 const char *obter_nome_setor(int setor);
 int exibir_tabela_setores();
+
+//Protótipos - BFS (Busca em Largura)
+void enfileirar_id(int id_setor)
 void bfs(GrafoHospital *grafo, int id_setor_inicial);
 
 // Protótipos - Tarjan (pontos de articulação)
