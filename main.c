@@ -294,7 +294,7 @@
         }
         break;
 
-          case 5:
+          /*case 5:
         {
             printf("\nListar Setores Alcançáveis usando BFS\n");
                     printf("--------------------------------------------\n");
@@ -313,6 +313,25 @@
             
             return 0;
         }
+        break; 
+        deixei esse comentario gigante aqui pq vai que o codigo que eu substitui está errado, neah*/
+
+        case 5:
+        {
+            printf("\nAnálise de Dependências (DFS)\n");
+            printf("--------------------------------------------\n");
+            
+            GrafoHospital *grafo = criar_grafo_hospital();
+            if (!grafo) break;
+            inserir_arestas_hospital(grafo);
+            
+            dfs(grafo); 
+
+            printf("\nAperte ENTER para retornar ao menu.\n");
+            getchar(); 
+
+            liberar_grafo_hospital(grafo); 
+        }
         break;
 
       /*  case 6:
@@ -324,14 +343,12 @@
 
         case 6:
         {
-            // Item 3: Chamamos a função completa que está em fila.c.
-            // Usamos NULL para o último parâmetro (fila_unica) porque não o estamos usando.
             printf("\nGerando Relatório Estatístico...\n");
             printf("--------------------------------------------\n");
             Gerar_relatorio_estendido(fila_priori1, fila_priori2, fila_priori3, NULL); 
             printf("--------------------------------------------\n");
             
-            // Item 7 (UX): Adiciona pausa para o usuário conseguir ler o relatório.
+            
             printf("\nAperte ENTER para retornar ao menu.\n");
             getchar(); 
         }

@@ -727,3 +727,68 @@ void bfs(GrafoHospital *grafo, int id_setor_inicial)
     }
     printf("======================================================\n");
 }
+
+/* gnt, essa eh a parte da DFS q pediu pra implementar
+   BUSCA EM PROFUNDIDADE (DFS) - ANÁLISE DE DEPENDÊNCIAS
+    */
+
+void dfs_visitar(GrafoHospital *grafo, int u, int visitado[], int *tempo) {
+    
+    
+    visitado[u] = 1; 
+    (*tempo)++;
+    int tempo_inicial = *tempo; 
+    
+    printf("   -> Descoberta (Tempo %d): [%d] %s\n", tempo_inicial, u, grafo->vertices[u].nome);
+    
+    
+    NoAdjacencia *atual = grafo->vertices[u].adjacentes;
+    
+    while (atual)
+    {
+        int v = atual->destino; 
+        
+        if (visitado[v] == 0) 
+        {
+            dfs_visitar(grafo, v, visitado, tempo);
+        }
+        else if (visitado[v] == 1) 
+        {
+            
+            // isso indica uma dependência circular
+
+            printf("   ⚠️ ALERTA DE DEPENDÊNCIA CIRCULAR: %s -> %s\n", 
+                   grafo->vertices[u].nome, grafo->vertices[v].nome);
+        }
+        atual = atual->prox;
+    }
+    
+    visitado[u] = 2; 
+    (*tempo)++;
+    int tempo_final = *tempo; 
+    
+    printf("   <- Finalização (Tempo %d): [%d] %s\n", tempo_final, u, grafo->vertices[u].nome);
+}
+
+// Função principal da DFS
+void dfs(GrafoHospital *grafo)
+{
+    if (!grafo) return;
+    
+    printf("\n======================================================\n");
+    printf("BUSCA EM PROFUNDIDADE (DFS) - ANÁLISE DE DEPENDÊNCIAS\n");
+    printf("======================================================\n");
+
+    int visitado[TOTAL_SETORES] = {0}; // 0=Novo, 1=Em processo, 2=Finalizado
+    int tempo = 0;
+    
+    // Percorre todos os vértices (para grafos desconexos)
+    for (int i = 0; i < TOTAL_SETORES; i++)
+    {
+        if (visitado[i] == 0)
+        {
+            dfs_visitar(grafo, i, visitado, &tempo);
+        }
+    }
+    printf("\nAnálise DFS concluída.\n");
+}

@@ -87,6 +87,15 @@ int Gerar_relatorio(Fila *f1, Fila *f2, Fila *f3, paciente paciente );
 int pegar_id(paciente paciente);
 
 // Protótipos - Grafo do Hospital
+
+/* ============================================================
+   ALGORITMOS DE GRAFO (BUSCA EM PROFUNDIDADE - DFS)
+============================================================ */
+
+void dfs_visitar(GrafoHospital *grafo, int u, int visitado[], int *tempo); 
+void dfs(GrafoHospital *grafo);
+
+
 GrafoHospital *criar_grafo_hospital();
 int inserir_vertices_hospital(GrafoHospital *grafo);
 int inserir_arestas_hospital(GrafoHospital *grafo);
