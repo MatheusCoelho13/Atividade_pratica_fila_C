@@ -727,3 +727,217 @@ void bfs(GrafoHospital *grafo, int id_setor_inicial)
     }
     printf("======================================================\n");
 }
+
+/* ============================================================
+   BUSCA EM PROFUNDIDADE (DFS) - ANÁLISE DE DEPENDÊNCIAS
+============================================================ */
+
+void dfs_visitar(GrafoHospital *grafo, int u, int visitado[], int *tempo) {
+    
+    visitado[u] = 1; 
+    (*tempo)++;
+    int tempo_inicial = *tempo; 
+    
+    printf("   -> Descoberta (Tempo %d): [%d] %s\n", tempo_inicial, u, grafo->vertices[u].nome);
+    
+    NoAdjacencia *atual = grafo->vertices[u].adjacentes;
+    
+    while (atual)
+    {
+        int v = atual->destino; 
+        
+        if (visitado[v] == 0) 
+        {
+            dfs_visitar(grafo, v, visitado, tempo);
+        }
+        else if (visitado[v] == 1) 
+        {
+            // Indica uma dependência circular
+            printf("   ⚠️  ALERTA DE DEPENDÊNCIA CIRCULAR: %s -> %s\n", 
+                   grafo->vertices[u].nome, grafo->vertices[v].nome);
+        }
+        atual = atual->prox;
+    }
+    
+    visitado[u] = 2; 
+    (*tempo)++;
+    int tempo_final = *tempo; 
+    
+    printf("   <- Finalização (Tempo %d): [%d] %s\n", tempo_final, u, grafo->vertices[u].nome);
+}
+
+// Função principal da DFS
+void dfs(GrafoHospital *grafo)
+{
+    if (!grafo) return;
+    
+    printf("\n======================================================\n");
+    printf("BUSCA EM PROFUNDIDADE (DFS) - ANÁLISE DE DEPENDÊNCIAS\n");
+    printf("======================================================\n");
+
+    int visitado[TOTAL_SETORES] = {0}; // 0=Novo, 1=Em processo, 2=Finalizado
+    int tempo = 0;
+    
+    // Percorre todos os vértices (para grafos desconexos)
+    for (int i = 0; i < TOTAL_SETORES; i++)
+    {
+        if (visitado[i] == 0)
+        {
+            dfs_visitar(grafo, i, visitado, &tempo);
+        }
+    }
+    printf("\nAnálise DFS concluída.\n");
+    printf("======================================================\n");
+}
+
+/* ============================================================
+   Tarjan - Encontrar Pontos de Articulacao
+   Saída: imprime setores cuja remoção desconecta o grafo.
+============================================================ */
+
+void tarjan_util(GrafoHospital *grafo, int u, int *tempo, int *disc, int *low, int *parent, int *ap)
+{
+    // inicializa discovery time e low
+    disc[u] = low[u] = ++(*tempo);
+    NoAdjacencia *adj = grafo->vertices[u].adjacentes;
+    while (adj)
+    {
+        int v = adj->destino;
+        if (disc[v] == 0)
+        {
+            parent[v] = u;
+            tarjan_util(grafo, v, tempo, disc, low, parent, ap);
+            // atualiza low[u]
+            if (low[v] < low[u]) low[u] = low[v];
+            // condição de ponto de articulação
+            if (parent[u] != -1 && low[v] >= disc[u])
+            {
+                ap[u] = 1;
+            }
+        }
+        else if (v != parent[u]) // back edge
+        {
+            if (disc[v] < low[u]) low[u] = disc[v];
+        }
+        adj = adj->prox;
+    }
+}
+
+void encontrar_pontos_articulacao(GrafoHospital *grafo) 
+{
+    if (!grafo)
+    {
+        fprintf(stderr, "ERRO: Grafo NULL. Nao e possivel executar Tarjan.\n");
+        return;
+    }
+
+    int n = grafo->total_vertices;
+
+    int *disc = (int *)calloc(n, sizeof(int));
+    int *low  = (int *)calloc(n, sizeof(int));
+    int *parent = (int *)malloc(n * sizeof(int));
+    int *ap = (int *)calloc(n, sizeof(int));
+
+    if (!disc || !low || !parent || !ap)
+    {
+        fprintf(stderr, "ERRO: Memoria insuficiente para Tarjan.\n");
+        free(disc); free(low); free(parent); free(ap);
+        return;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        disc[i] = 0;
+        low[i] = 0;
+        parent[i] = -1;
+        ap[i] = 0;
+    }
+
+    int tempo = 0;
+    for (int u = 0; u < n; u++)
+    {
+        if (disc[u] == 0)
+        {
+            disc[u] = low[u] = ++tempo;
+            NoAdjacencia *adj = grafo->vertices[u].adjacentes;
+            int filhos_raiz = 0;
+
+            while (adj)
+            {
+                int v = adj->destino;
+
+                if (disc[v] == 0)
+                {
+                    parent[v] = u;
+                    filhos_raiz++;
+                    tarjan_util(grafo, v, &tempo, disc, low, parent, ap);
+
+                    if (low[v] < low[u]) low[u] = low[v];
+                    if (parent[u] != -1 && low[v] >= disc[u]) ap[u] = 1;
+                }
+                else if (v != parent[u])
+                {
+                    if (disc[v] < low[u]) low[u] = disc[v];
+                }
+                adj = adj->prox;
+            }
+
+            if (filhos_raiz > 1)
+                ap[u] = 1;
+        }
+    }
+
+    printf("\n======================================================\n");
+    printf("RELATORIO DE SETORES CRITICOS (PONTOS DE ARTICULACAO)\n"); 
+    printf("======================================================\n"); 
+
+    FILE *arquivo = fopen("setores_criticos.txt", "w");
+    if (!arquivo)                                      
+    {                                                  
+        printf("ERRO ao criar arquivo de setores criticos.\n");
+    }                                                  
+    else                                               
+    {                                                  
+        fprintf(arquivo, "RELATORIO DE SETORES CRITICOS\n");
+        fprintf(arquivo, "==============================\n\n");
+    }                                                  
+
+    int total_criticos = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (ap[i])
+        {
+            printf("  - [%d] %s\n", i, grafo->vertices[i].nome);
+
+            if (arquivo)
+                fprintf(arquivo, "  - [%d] %s\n", i, grafo->vertices[i].nome);
+
+            total_criticos++;
+        }
+    }
+
+    if (total_criticos == 0)
+    {
+        printf("  Nenhum setor crítico identificado.\n");
+
+        if (arquivo)
+            fprintf(arquivo, "Nenhum setor critico identificado.\n");
+    }
+    else
+    {
+        printf("\n  Total de setores críticos: %d\n", total_criticos);
+
+        if (arquivo)
+            fprintf(arquivo, "\nTotal de setores criticos: %d\n", total_criticos); 
+    }
+
+    printf("======================================================\n");
+
+    if (arquivo) fclose(arquivo); 
+    printf("Arquivo 'setores_criticos.txt' gerado com sucesso.\n");
+
+    free(disc);
+    free(low);
+    free(parent);
+    free(ap);
+}
